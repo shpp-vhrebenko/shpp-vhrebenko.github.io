@@ -1,0 +1,239 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <form class="form-horizontal" id="calcLightning" role="form" name="calcLightning" ng-submit="main.calcLoads(house)" ng-click="showSpecification = false" novalidate>
+      <div class="form-group">
+        <label for="spaceRoom" class="col-sm-8 control-label">Угол наклона, градусов</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="roof_pitch" placeholder="31" name="roof_pitch" ng-model="house.housetop.roof_pitch" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="perimeterRoom" class="col-sm-8 control-label" >Ширина стропильной ноги, см</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="rafters_width" name="rafters_width" ng-model="house.housetop.rafters_width" placeholder="10" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="roof_width" class="col-sm-8 control-label">Ширина пролета односкатной крыши,  м</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="roof_width" name="roof_width" ng-model="house.housetop.roof_width" placeholder="4.85" min="0" required >
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="rafters_step" class="col-sm-8 control-label">Шаг стропил,  м</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="rafters_step" name="rafters_step" ng-model="house.housetop.rafters_step" placeholder="1" min="0" required >
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="roof_power" class="col-sm-8 control-label">Нагрузка кровли,  кг/м2</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="roof_power" name="roof_power" ng-model="house.housetop.roof_power" placeholder="50" min="0" required >
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="snow_power" class="col-sm-8 control-label">Снег (район),  кг/м2</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="snow_power" name="snow_power" ng-model="house.housetop.snow_power" placeholder="130" min="0" required >
+        </div>
+      </div>
+      <h3><strong>Обрешетка</strong></h3>
+      <div class="form-group">
+        <label for="lathing_step" class="col-sm-8 control-label">Шаг обрешетки, м</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="lathing_step" name="lathing_step" ng-model="house.housetop.lathing.lathing_step" placeholder="0.3" min="0" required >
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lathing_b" class="col-sm-8 control-label">Ширина, см</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="lathing_b" name="lathing_b" ng-model="house.housetop.lathing.lathing_b" placeholder="5" min="0" required >
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lathing_h" class="col-sm-8 control-label">Высота, см</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="lathing_h" name="lathing_h" ng-model="house.housetop.lathing.lathing_h" placeholder="5" min="0" required >
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled="calcLightning.$invalid">Расчет</button>
+        </div>
+      </div>
+    </form>
+  </div>
+<div class="col-xs-12 col-md-6">
+  <div class="drawing" ng-show="!showSpecification">
+    <h2>Чертеж</h2>
+  </div>
+  <div class="table_specification" data-example-id="striped-table" ng-show="showSpecification">
+    <h4>Расчет обрешетки (2х пролетн.)</h4>
+    <table class="table table-striped">
+      <thead>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Нагрузка погонная кг/м</td>
+          <td>{{response.calcLoads.lathing.Length_power}}</td>
+        </tr>
+        <tr>
+          <td>Момент в  пролете кгхм</td>
+          <td>{{response.calcLoads.lathing.span_moment}}</td>
+        </tr>
+        <tr>
+          <td>Момент Мх кгхм</td>
+          <td>{{response.calcLoads.lathing.moment_Mx}}</td>
+        </tr>
+        <tr>
+          <td>Момент Му кгхм</td>
+          <td>{{response.calcLoads.lathing.moment_My}}</td>
+        </tr>
+        <tr>
+          <td>Wx см2</td>
+          <td>{{response.calcLoads.lathing.Wx}}</td>
+        </tr>
+        <tr>
+          <td>Wy см2</td>
+          <td>{{response.calcLoads.lathing.Wy}}</td>
+        </tr>
+        <tr>
+          <td>Напряжения кг/2</td>
+          <td>{{response.calcLoads.lathing.strain}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>Нагрузки</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Элементы</th>
+          <th>Норм. кг/м</th>
+          <th>К-т пер.</th>
+          <th>Расч. кг/м</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Кровля</td>
+          <td>{{response.calcLoads.loads.roof_power_norm}}</td>
+          <td>1.1</td>
+          <td>{{response.calcLoads.loads.roof_power_calc}}</td>
+        </tr>
+        <tr>
+          <td>Обрешетка</td>
+          <td>{{response.calcLoads.loads.lathing_power_norm}}</td>
+          <td>1.3</td>
+          <td>{{response.calcLoads.loads.lathing_power_calc}}</td>
+        </tr>
+        <tr>
+          <td>Строп. нога(ориент.)</td>
+          <td>{{response.calcLoads.loads.rafters_step_power_norm}}</td>
+          <td>1.3</td>
+          <td>{{response.calcLoads.loads.rafters_step_power_calc}}</td>
+        </tr>
+        <tr>
+          <td>Снег</td>
+          <td>{{response.calcLoads.loads.snow_power_norm}}</td>
+          <td>1.4</td>
+          <td>{{response.calcLoads.loads.snow_power_calc}}</td>
+        </tr>
+        <tr>
+          <td>Итого</td>
+          <td>{{response.calcLoads.loads.all_power_norm}}</td>
+          <td></td>
+          <td>{{response.calcLoads.loads.all_power_calc}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>Расчет стропы</h4>
+    <table class="table table-striped">
+      <thead>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Прогиб, см/м</td>
+          <td>{{response.calcLoads.Strop.deflection}}</td>
+        </tr>
+        <tr>
+          <td>Ru, кг/см2</td>
+          <td>{{response.calcLoads.Strop.Ru}}</td>
+        </tr>
+        <tr>
+          <td>Момент, кгхм</td>
+          <td>{{response.calcLoads.Strop.Moment_all}}</td>
+        </tr>
+        <tr>
+          <td>Wтр. см3</td>
+          <td>{{response.calcLoads.Strop.Wtr}}</td>
+        </tr>
+        <tr>
+          <td>Jтр. М4</td>
+          <td>{{response.calcLoads.Strop.Jtr}}</td>
+        </tr>
+        <tr>
+          <td>Втр(устойч.), см.</td>
+          <td>{{response.calcLoads.Strop.Btr}}</td>
+        </tr>
+        <tr>
+          <td>Нтр., (прочн.), см.</td>
+          <td>{{response.calcLoads.Strop.Htr_fix}}</td>
+        </tr>
+        <tr>
+          <td>Нтр., (прогиб), см.</td>
+          <td>{{response.calcLoads.Strop.Htr_deflection}}</td>
+        </tr>
+        <tr>
+          <td>Н, (по сорт-ту), см.</td>
+          <td>{{response.calcLoads.Strop.H_sort}}</td>
+        </tr>
+        <tr>
+          <td>Принимаем Н см.</td>
+          <td>{{response.calcLoads.Strop.H_sort}}</td>
+        </tr>
+        <tr>
+          <td>Гибкость I</td>
+          <td>{{response.calcLoads.Strop.flexibility}}</td>
+        </tr>
+        <tr>
+          <td>Коэф.прод.изгиба j</td>
+          <td>{{response.calcLoads.Strop.K_prod_flexibility}}</td>
+        </tr>
+        <tr>
+          <td>Коэф. x</td>
+          <td>{{response.calcLoads.Strop.K_x}}</td>
+        </tr>
+        <tr>
+          <td>Момент (сжат.) Мд кгхм</td>
+          <td>{{response.calcLoads.Strop.Moment_compres}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>Соответствие условиям</h4>
+    <table class="table table-striped">
+      <thead>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Напряж.изг. кг/см2</td>
+          <td>{{response.calcLoads.Tension.strain_flex}}</td>
+          <td>{{response.calcLoads.Condition.first_condition}}</td>
+        </tr>
+        <tr>
+          <td>Прогиб</td>
+          <td>{{response.calcLoads.Tension.deflection_rafters}}</td>
+          <td>{{response.calcLoads.Condition.second_condition}}</td>
+        </tr>
+        <tr>
+          <td>Напряж.скал.кг/см2</td>
+          <td>{{response.calcLoads.Tension.Tension_chipping}}</td>
+          <td>{{response.calcLoads.Condition.third_condition}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+</div>
+

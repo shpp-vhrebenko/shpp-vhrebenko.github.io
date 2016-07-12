@@ -1,0 +1,133 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6">
+    <form class="form-horizontal" id="calcLightning" role="form" name="calcLightning" ng-submit="main.calcLightning(room)" ng-click="showSpecification = false" novalidate>
+      <div class="form-group">
+        <label for="spaceRoom" class="col-sm-8 control-label">Площадь помещения, кв м</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="spaceRoom" placeholder="25" name="spaceRoom" ng-model="room.space" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="perimeterRoom" class="col-sm-8 control-label" >Периметр помещения,  м</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="perimeterRoom" name="perimeterRoom" ng-model="room.perimeter" placeholder="20" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="heightRoom" class="col-sm-8 control-label">Высота помещения,  м</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="heightRoom" name="heightRoom" ng-model="room.height" placeholder="2.5" min="0.0" required >
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="heightRoomlighting" class="col-sm-8 control-label">Высота замера освещенности,  м</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="heightRoomlighting" name="heightRoomlighting" max="{{room.height}}" ng-model="room.heightRoomLighting" placeholder="0.8" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="reflectionСoefficient" class="col-sm-4 control-label">Коефициент отражения</label>
+        <div class="col-sm-8" >
+          <select class="form-control" id="reflectionCoefficient" name="reflectionCoefficient" ng-model="room.reflectCoeff" required>
+            <option ng-repeat="refCoef in main.reflectCoeffArray" value="{{refCoef.value}}">{{refCoef.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="safetyFactor" class="col-sm-4 control-label">Коефициент запаса</label>
+        <div class="col-sm-8">
+          <select class="form-control" id="safetyFactor" name="safetyFactor"  ng-model="room.safetyFactor" required>
+            <option ng-repeat="safFactor in main.safetyFactorArray" value="{{safFactor.value}}">{{safFactor.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="requiredIllumination" class="col-sm-4 control-label">Требуемая освещенность</label>
+        <div class="col-sm-8">
+          <select class="form-control" id="requiredIllumination" name="requiredIllumination" ng-model="room.requiredIllumination" required>
+            <option ng-repeat="item in main.requiredIlluminationArray" value="{{item.value}}">{{item.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="customRequiredIllumination" class="col-sm-8 control-label"> Текущее значение требуемой освещенности</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" id="customRequiredIllumination" name="customRequiredIllumination" ng-pattern="regex" ng-model="room.requiredIllumination" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <h5>Выберите тип светильника</h5>
+        <p class="radio-panel">
+          <label class="radio-inline">
+              <input type="radio" value="led" name="typeLamp" ng-model="room.lamp.typeLamp">
+              Светодиодный
+            </label>
+            <label class="radio-inline">
+              <input type="radio" value="traditional" name="typeLamp" ng-model="room.lamp.typeLamp" required>
+              Традиционный
+            </label>
+        </p>
+
+             </div>
+      <div class="form-group" ng-hide="main.isTypeLed(room.lamp.typeLamp)">
+        <label for="numbeLamps" class="col-sm-8 control-label">Количество ламп в светильнике</label>
+        <div class="col-sm-4" >
+          <select class="form-control" id="numbeLamps" name="numbeLamps" ng-model="room.lamp.numbeLamps" required>
+            <option value="1" >1</option>
+            <option value="2" >2</option>
+            <option value="3" >3</option>
+            <option value="4" >4</option>
+            <option value="5" >5</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="luminousFlux" class="col-sm-8 control-label" ng-hide="main.isTypeLed(room.lamp.typeLamp)">Световой поток лампы, лк</label>
+        <label for="luminousFlux" class="col-sm-8 control-label" ng-show="main.isTypeLed(room.lamp.typeLamp)">Световой поток светильника, лк</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="luminousFlux" name="luminousFlux" ng-model="room.lamp.luminousFlux" placeholder="1550" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="lampPower" class="col-sm-8 control-label">Мощность одной лампы, Вт</label>
+        <div class="col-sm-4">
+          <input type="number" class="form-control" id="lampPower" name="lampPower" ng-model="room.lamp.power" placeholder="40" min="0" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled="calcLightning.$invalid">Расчет</button>
+        </div>
+      </div>
+    </form>
+  </div>
+<div class="col-xs-12 col-md-6">
+  <div class="table_specification" data-example-id="striped-table" ng-show="showSpecification">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Наименование</th>
+          <th>Тип</th>
+          <th>количество</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Светильник</td>
+          <td>количество ламп  {{room.lamp.numbeLamps}}</td>
+          <td>{{numbeLamps}}</td>
+        </tr>
+        <tr>
+          <td>Лампа</td>
+          <td>{{room.lamp.luminousFlux}}</td>
+          <td>{{room.lamp.numbeLamps * numbeLamps}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="drawing">
+    <h2>Чертеж</h2>
+  </div>
+</div>
+
+</div>
