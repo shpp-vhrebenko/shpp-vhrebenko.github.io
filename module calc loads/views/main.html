@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-12 col-md-6">
-    <form class="form-horizontal" id="calcLightning" role="form" name="calcLightning" ng-submit="main.calcLoads(house)" ng-click="showSpecification = false" novalidate>
+    <form class="form-horizontal" id="calcLightning" role="form" name="calcLightning" ng-submit="main.calcLoads(house)" ng-click="showSpecification = false; showCondition = false" novalidate>
       <div class="form-group">
         <label for="spaceRoom" class="col-sm-8 control-label">Угол наклона, градусов</label>
         <div class="col-sm-4">
@@ -10,7 +10,7 @@
       <div class="form-group">
         <label for="perimeterRoom" class="col-sm-8 control-label" >Ширина стропильной ноги, см</label>
         <div class="col-sm-4">
-          <input type="number" class="form-control" id="rafters_width" name="rafters_width" ng-model="house.housetop.rafters_width" placeholder="10" min="0" required>
+          <input type="number" class="form-control" id="rafters_width" name="rafters_width" ng-model="house.housetop.rafters_width" placeholder="10" min="0.0" step="0.5" required>
         </div>
       </div>
       <div class="form-group">
@@ -22,7 +22,7 @@
       <div class="form-group">
         <label for="rafters_step" class="col-sm-8 control-label">Шаг стропил,  м</label>
         <div class="col-sm-4">
-          <input type="number" class="form-control" id="rafters_step" name="rafters_step" ng-model="house.housetop.rafters_step" placeholder="1" min="0" required >
+          <input type="number" class="form-control" id="rafters_step" name="rafters_step" ng-model="house.housetop.rafters_step" placeholder="1" min="0.0" step="0.1" required >
         </div>
       </div>
       <div class="form-group">
@@ -41,7 +41,7 @@
       <div class="form-group">
         <label for="lathing_step" class="col-sm-8 control-label">Шаг обрешетки, м</label>
         <div class="col-sm-4">
-          <input type="number" class="form-control" id="lathing_step" name="lathing_step" ng-model="house.housetop.lathing.lathing_step" placeholder="0.3" min="0" required >
+          <input type="number" class="form-control" id="lathing_step" name="lathing_step" ng-model="house.housetop.lathing.lathing_step" placeholder="0.3" min="0" step="0.1" required >
         </div>
       </div>
       <div class="form-group">
@@ -57,11 +57,12 @@
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
+        <div class="col-sm-12">
           <button type="submit" class="btn btn-success btn-lg btn-block" ng-disabled="calcLightning.$invalid">Расчет</button>
         </div>
       </div>
     </form>
+    <p id="error_message" ng-class="message" ng-show="showCondition">{{error_message}}</p>
   </div>
 <div class="col-xs-12 col-md-6">
   <div class="drawing" ng-show="!showSpecification">
@@ -189,7 +190,7 @@
         </tr>
         <tr>
           <td>Принимаем Н см.</td>
-          <td>{{response.calcLoads.Strop.H_sort}}</td>
+          <td>{{response.calcLoads.Strop.H_posible}}</td>
         </tr>
         <tr>
           <td>Гибкость I</td>
@@ -217,17 +218,14 @@
         <tr>
           <td>Напряж.изг. кг/см2</td>
           <td>{{response.calcLoads.Tension.strain_flex}}</td>
-          <td>{{response.calcLoads.Condition.first_condition}}</td>
         </tr>
         <tr>
           <td>Прогиб</td>
           <td>{{response.calcLoads.Tension.deflection_rafters}}</td>
-          <td>{{response.calcLoads.Condition.second_condition}}</td>
         </tr>
         <tr>
           <td>Напряж.скал.кг/см2</td>
           <td>{{response.calcLoads.Tension.Tension_chipping}}</td>
-          <td>{{response.calcLoads.Condition.third_condition}}</td>
         </tr>
       </tbody>
     </table>
